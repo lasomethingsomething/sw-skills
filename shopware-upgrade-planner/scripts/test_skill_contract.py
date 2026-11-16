@@ -24,6 +24,14 @@ class MetadataTests(unittest.TestCase):
         text = '---\nname: sample\ndescription: Sample\nmetadata:\n  version: 1.0\n---\n'
         self.assertTrue(check_skill.check_metadata(text, 'sample'))
 
+    def test_rejects_unquoted_three_part_version(self):
+        text = '---\nname: sample\ndescription: Sample\nmetadata:\n  version: 1.0.0\n---\n'
+        self.assertTrue(any('quoted' in error for error in check_skill.check_metadata(text, 'sample')))
+
+    def test_accepts_single_quoted_version(self):
+        text = "---\nname: sample\ndescription: Sample\nmetadata:\n  version: '1.0.0'\n---\n"
+        self.assertEqual([], check_skill.check_metadata(text, 'sample'))
+
 
 class EvaluationTests(unittest.TestCase):
     def setUp(self):
@@ -43,6 +51,11 @@ class EvaluationTests(unittest.TestCase):
     def test_extra_criterion_field_is_rejected(self):
         self.suite['scenarios'][0]['criteria'][0]['extra'] = True
         self.assertTrue(check_skill.check_scenarios(self.suite))
+
+    def test_duplicate_expectation_text_is_rejected(self):
+        criteria = self.suite['scenarios'][0]['criteria']
+        criteria[1]['criterion'] = criteria[0]['criterion'].upper()
+        self.assertTrue(any('duplicate criterion' in error for error in check_skill.check_scenarios(self.suite)))
 
 
 class LinkTests(unittest.TestCase):
@@ -67,6 +80,12 @@ class VersionTests(unittest.TestCase):
         self.assertEqual([], check_skill.check_bump('1.0.1', '1.0.0', True))
         self.assertEqual([], check_skill.check_bump('1.0.0', '1.0.0', False))
         self.assertTrue(check_skill.check_bump('0.1.0', None, True))
+
+    def test_version_resets_when_minor_or_major_increases(self):
+        self.assertTrue(check_skill.check_bump('1.5.3', '1.4.2', True))
+        self.assertEqual([], check_skill.check_bump('1.5.0', '1.4.2', True))
+        self.assertTrue(check_skill.check_bump('2.1.0', '1.4.2', True))
+        self.assertEqual([], check_skill.check_bump('2.0.0', '1.4.2', True))
 
     def test_git_comparison_requires_bump_on_committed_change(self):
         with tempfile.TemporaryDirectory() as tmp:

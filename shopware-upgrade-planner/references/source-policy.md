@@ -19,7 +19,7 @@ Useful entry points:
 
 - [Shopware 6.7.0.0 release](https://github.com/shopware/shopware/releases/tag/v6.7.0.0)
 - [Version upgrades and migrations](https://developer.shopware.com/docs/guides/upgrades-migrations/)
-- [Administration Vite migration](https://developer.shopware.com/docs/guides/plugins/plugins/administration/system-updates/vite.html)
+- [Administration Vite migration](https://developer.shopware.com/docs/guides/upgrades-migrations/administration/vite.html)
 - [Shopware 6.7 update guide](https://docs.shopware.com/en/shopware-6-en/update-guides/update-guide-shopware-67)
 - [CLI upgrade command](https://github.com/shopware/shopware-cli/blob/0.20.0/cmd/project/project_upgrade.go)
 - [Shopware language server](https://github.com/shopware/shopware-lsp)

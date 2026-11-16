@@ -57,6 +57,14 @@ def check_metadata(text, name):
             version_tuple(meta.get('version'))
         except ValueError as exc:
             errors.append(str(exc))
+        else:
+            # YAML treats unquoted 1.0.0 as a string, so inspect the scalar style too.
+            frontmatter = re.match(r'\A---\s*\n(.*?)\n---\s*(?:\n|$)', text, re.DOTALL).group(1)
+            root = yaml.compose(frontmatter)
+            metadata_node = next((value for key, value in root.value if key.value == 'metadata'), None)
+            version_node = next((value for key, value in metadata_node.value if key.value == 'version'), None)
+            if version_node is None or version_node.style not in ("'", '"'):
+                errors.append('metadata.version must be quoted in YAML.')
     if len(text.splitlines()) > 500:
         errors.append('SKILL.md exceeds 500 lines.')
     return errors
@@ -86,6 +94,7 @@ def check_scenarios(document):
         if not isinstance(criteria, list) or not criteria:
             errors.append(f'Scenario {sid} needs at least one atomic criterion.')
             continue
+        criterion_texts = set()
         for criterion in criteria:
             if not isinstance(criterion, dict) or set(criterion) != {'id', 'criterion'}:
                 errors.append(f'Scenario {sid} criteria must have exactly id and criterion.')
@@ -97,6 +106,10 @@ def check_scenarios(document):
                 criteria_ids.add(cid)
             if not isinstance(text, str) or not text.strip():
                 errors.append(f'Criterion {cid} must be a nonempty string.')
+            elif text.strip().casefold() in criterion_texts:
+                errors.append(f'Scenario {sid} has duplicate criterion text.')
+            else:
+                criterion_texts.add(text.strip().casefold())
     return errors
 
 
@@ -126,8 +139,13 @@ def check_bump(current, base, changed):
         current_version = version_tuple(current)
         if base is None:
             return [] if current_version == (1, 0, 0) else ['First tracked version must be 1.0.0.']
-        if current_version <= version_tuple(base):
+        base_version = version_tuple(base)
+        if current_version <= base_version:
             return ['Skill changes require a SemVer version greater than the base version.']
+        if current_version[0] > base_version[0] and current_version[1:] != (0, 0):
+            return ['A major version bump must reset minor and patch to zero.']
+        if current_version[0] == base_version[0] and current_version[1] > base_version[1] and current_version[2] != 0:
+            return ['A minor version bump must reset patch to zero.']
     except ValueError as exc:
         return [str(exc)]
     return []

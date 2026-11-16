@@ -2,7 +2,7 @@
 name: shopware-upgrade-planner
 description: Plan and investigate Shopware 6.6 to 6.7 upgrades using versioned upgrade guidance and project context. Use when a user asks what could break, how to prepare a 6.6-to-6.7 migration, how a plugin, theme, payment integration, or hosting setup may be affected, or wants an evidence-linked upgrade checklist.
 metadata:
-  version: "1.0.0"
+  version: "1.0.1"
 ---
 
 # Shopware upgrade planner
