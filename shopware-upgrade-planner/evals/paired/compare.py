@@ -7,7 +7,7 @@ import random
 import secrets
 import sys
 
-SUITE = Path(__file__).resolve().parents[2] / 'shopware-upgrade-planner/evals/scenarios.json'
+SUITE = Path(__file__).resolve().parents[1] / 'scenarios.json'
 RESULTS = {'pass', 'fail', 'not_run'}
 COMPARISONS = {'no_skill': ('with_skill', 'without_skill'),
                'previous': ('candidate', 'previous')}
