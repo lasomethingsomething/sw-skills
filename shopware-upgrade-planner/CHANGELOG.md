@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.2
+- `SKILL.md`: the dry-run disclosure names both temporary Composer files and says existing files with those names are overwritten and deleted.
+- Removed committed Python cache files; `__pycache__/` is ignored.
+
 ## 1.1.1
 - `SKILL.md`: `project upgrade --dry-run` is no longer called read-only. The skill now says what it writes (`.shopware-cli/upgrade/report.md`, a temporary Composer manifest and lock) and that it runs Composer over the network, and asks before running it.
 

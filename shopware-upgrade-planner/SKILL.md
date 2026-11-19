@@ -2,7 +2,7 @@
 name: shopware-upgrade-planner
 description: Plan and investigate Shopware 6.6 to 6.7 upgrades using versioned upgrade guidance and project context. Use when a user asks what could break, how to prepare a 6.6-to-6.7 migration, how a plugin, theme, payment integration, or hosting setup may be affected, or wants an evidence-linked upgrade checklist.
 metadata:
-  version: "1.1.1"
+  version: "1.1.2"
 ---
 
 # Shopware upgrade planner
@@ -27,7 +27,7 @@ Progress:
   ```
 
   Open each hit at its source line before using it. Then, if you have network access: the exact target-tag `UPGRADE-6.7.md`, the release notes and the official migration guides. GitHub issues are leads only: verify status and the fix release before citing one. Read [source policy](references/source-policy.md) when a hit's version or status is unclear.
-- [ ] 4. **Project evidence** (only with opt-in and a project). Default: `shopware-cli --version`, then `shopware-cli project upgrade --no-interaction --target <version> --dry-run` (CLI 0.18.5+). It doesn't change `composer.json`, `composer.lock` or `vendor/`, but it isn't read-only: it writes `.shopware-cli/upgrade/report.md` (kept, overwrites an earlier one) and a temporary `.shopware-cli-upgrade-composer.json` with its lock file (removed after), and it runs Composer and fetches package metadata over the network, inside the project's Docker container if it has one. Tell the user this and run it only after they agree. Run `project fix` / `extension fix` only when the user asks for fixes. A Shopware language server, if available, adds diagnostics; record its version.
+- [ ] 4. **Project evidence** (only with opt-in and a project). Default: `shopware-cli --version`, then `shopware-cli project upgrade --no-interaction --target <version> --dry-run` (CLI 0.18.5+). It doesn't change `composer.json`, `composer.lock` or `vendor/`, but it isn't read-only: it writes `.shopware-cli/upgrade/report.md` (kept, overwrites an earlier one) and a temporary `.shopware-cli-upgrade-composer.json` and `.shopware-cli-upgrade-composer.lock` in the project root (removed after; files with those names that already exist are overwritten and deleted), and it runs Composer and fetches package metadata over the network, inside the project's Docker container if it has one. Tell the user this and run it only after they agree. Run `project fix` / `extension fix` only when the user asks for fixes. A Shopware language server, if available, adds diagnostics; record its version.
 - [ ] 5. **Plan.** Use the [plan template](assets/plan-template.md). Order: inventory and unknowns; backup and test environment; compatibility and hosting; extension, theme and integration work; rehearsal and critical-flow tests; production deployment, verification and recovery. Drop categories that don't apply.
 - [ ] 6. **Check the plan** before showing it; fix and re-check until all hold:
   - Every step has action, why, owner, timing, applicability, status and an evidence link with its version.
