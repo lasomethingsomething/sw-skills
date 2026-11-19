@@ -17,6 +17,7 @@ Use synthetic project information. Do not include personal data, credentials, pr
 - [ ] Evaluation criteria each assess one outcome; duplicated or conflicting expectations are resolved.
 - [ ] The evaluation covers the current skill changes and compares a baseline; unrun checks are marked not run.
 - [ ] Source claims, affected versions, links and any later corrections are checked.
+- [ ] The change was checked against the skill-authoring sources in `CLAUDE.md` (agentskills.io best practices and specification, the Google post on shipping skills); unfixed gaps are listed above.
 - [ ] Instructions are concise and clear; fragile deterministic steps use tested scripts; referenced detail is discoverable from the skill.
 - [ ] Privacy boundaries, untrusted inputs and unsupported journeys are handled.
 - [ ] An upgrade subject matter expert has reviewed the change before release.
