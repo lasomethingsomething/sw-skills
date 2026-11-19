@@ -1,5 +1,8 @@
 # Changelog
 
+## 1.1.1
+- `SKILL.md`: `project upgrade --dry-run` is no longer called read-only. The skill now says what it writes (`.shopware-cli/upgrade/report.md`, a temporary Composer manifest and lock) and that it runs Composer over the network, and asks before running it.
+
 ## 1.1.0
 - `SKILL.md`: hard rules, a checklist workflow with one default per step (bundled search; `project upgrade --dry-run`), a plan self-check, and a gotchas list for 6.7.0.0. Privacy detail moved to `references/privacy.md`.
 - Removed the bundled issue index and `--include-issues`; issues are searched live as leads.
