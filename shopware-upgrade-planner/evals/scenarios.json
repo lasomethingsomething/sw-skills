@@ -22,6 +22,30 @@
       ]
     },
     {
+      "id": "payment-handler-code",
+      "prompt": "Plan a 6.6.10.0 to 6.7.0.0 upgrade for a synthetic plugin whose payment handler implements AsyncPaymentHandlerInterface.",
+      "criteria": [
+        {"id": "abstract-payment-handler", "criterion": "The plan names AbstractPaymentHandler as the replacement for the old payment handler interfaces."},
+        {"id": "payment-handler-evidence", "criterion": "The plan links the 6.7.0.0 upgrade guide section on reworked payment handlers."}
+      ]
+    },
+    {
+      "id": "cached-route-decorator",
+      "prompt": "Plan a 6.6.10.31 to 6.7.2.0 upgrade for a synthetic plugin that decorates a Store-API Cached*Route class.",
+      "criteria": [
+        {"id": "route-cache-removed", "criterion": "The plan states that Store-API route caching and the Cached*Route classes are removed in 6.7."},
+        {"id": "decorator-rework", "criterion": "The plan includes a step to rework or remove the decorator."}
+      ]
+    },
+    {
+      "id": "theme-markup-overrides",
+      "prompt": "Plan a 6.6.10.0 to 6.7.0.0 upgrade for a synthetic storefront theme that overrides the header, footer and line-item templates and styles them with CSS selectors.",
+      "criteria": [
+        {"id": "esi-header-footer", "criterion": "The plan flags that header and footer render through ESI in 6.7."},
+        {"id": "markup-changes", "criterion": "The plan flags the accessibility markup changes to line items or modal triggers as a risk for template overrides and CSS selectors."}
+      ]
+    },
+    {
       "id": "future-version-boundary",
       "prompt": "My synthetic project is upgrading from 6.6.10.31 to 6.7.14.0. Is a change first introduced in 6.7.16.0 automatically required for this target?",
       "criteria": [

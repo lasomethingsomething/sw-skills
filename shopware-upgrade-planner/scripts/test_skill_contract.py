@@ -97,7 +97,7 @@ class VersionTests(unittest.TestCase):
             path.write_text('---\nname: planner\ndescription: Sample\nmetadata:\n  version: "1.0.0"\n---\n')
             def commit(message):
                 subprocess.run(['git', 'add', '.'], cwd=repo, check=True)
-                subprocess.run(['git', '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                subprocess.run(['git', '-c', 'commit.gpgsign=false', '-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
                                 'commit', '-q', '-m', message], cwd=repo, check=True)
             commit('base')
             base = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=repo, text=True).strip()

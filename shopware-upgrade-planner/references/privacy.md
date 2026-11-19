@@ -1,5 +1,7 @@
 # Privacy boundaries and deployment review
 
+The agent follows "Use during the prototype". "Before sharing or deploying" is for the team that deploys the skill.
+
 This prototype is a skill used by an AI host. Its instructions are not a technical enforcement layer, and privacy depends on the host, model provider, connectors, project, and operator. The bundled search script runs locally and contains no network calls, telemetry, persistent logging, or identifier generation. This does not mean the AI host, shell, editor, operating system, other tools, or provider do the same.
 
 ## Use during the prototype
@@ -8,7 +10,7 @@ This prototype is a skill used by an AI host. Its instructions are not a technic
 - Start with exact product versions, generic technical descriptions, public upgrade guidance, and synthetic or anonymized examples. Ask for the minimum needed. Do not request customer names, email addresses, order or payment details, production database contents, logs, credentials, tokens or secrets.
 - Do not read `.env` files, credential files, authentication settings, production database dumps, or bulk logs as part of planning. Do not paste data or code into web search, issues, comments, or a model prompt. If a relevant file might include personal information, keep it out of external services until the user has arranged appropriate authorization and safeguards. Redaction is not guaranteed to detect everything; pseudonymized information can still be personal data.
 - The search command's `--query` argument can be recorded in shell history or visible in process listings. Use generic terms only. `--query-stdin` avoids passing the query as an argument, but stdin, shell pipelines, the host agent, or terminal logging may still expose it. Search output does not echo the query or an absolute local path; it can still contain text from public source documents.
-- Public issue reports can identify people or contain personal data. The curated issue index contains generic descriptions and links, not issue bodies. Open issues only when needed and avoid copying reporters, comments, logs, screenshots, or identifiable information into outputs. Public availability does not itself remove data-protection obligations.
+- Public issue reports can identify people or contain personal data. Open issues only when needed and avoid copying reporters, comments, logs, screenshots, or identifiable information into outputs. Public availability does not itself remove data-protection obligations.
 - Do not enable telemetry, analytics, session identifiers, or plan uploads in the prototype. Do not silently save plans or conversations. If the user asks to save a plan, minimize its content, use their chosen location and explain that the host or service controls access, retention and deletion. An anonymized plan is not guaranteed merely because obvious identifiers are removed.
 
 ## Before sharing or deploying

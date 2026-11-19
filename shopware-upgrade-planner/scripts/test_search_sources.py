@@ -23,28 +23,20 @@ class SearchTests(unittest.TestCase):
         target_hits = [x for x in result['matches'] if x['source_series'] == '6.7']
         self.assertTrue(target_hits)
         self.assertTrue(all(s.version(x['release_heading']) <= s.version('6.7.14.0') for x in target_hits))
-        self.assertTrue(all(x['snapshot_ref'] == 'v6.7.16.0' and not x['exact_version_snapshot'] for x in target_hits))
+        self.assertTrue(all(x['snapshot_ref'] == 'v6.7.16.1' and not x['exact_version_snapshot'] for x in target_hits))
 
     def test_exact_latest_snapshot_is_labelled_correctly(self):
-        result = s.search('6.6.10.31', '6.7.16.0', 'MCP allowlist', 10)
+        result = s.search('6.6.10.31', '6.7.16.1', 'MCP allowlist', 10)
         hit = next(x for x in result['matches'] if 'allowlist' in x['heading'].lower())
         self.assertEqual(hit['release_heading'], '6.7.16.0')
         self.assertTrue(hit['exact_version_snapshot'])
 
     def test_rejects_unsupported_or_invalid_journeys(self):
-        for start, target in [('6.5.0.0', '6.7.0.0'), ('6.6.10.32', '6.7.0.0'),
-                              ('6.6.10.0', '6.7.17.0'), ('6.6', '6.7.0.0')]:
+        for start, target in [('6.5.0.0', '6.7.0.0'), ('6.6.10.33', '6.7.0.0'),
+                              ('6.6.10.0', '6.7.16.2'), ('6.6', '6.7.0.0')]:
             with self.subTest(start=start, target=target):
                 with self.assertRaises(ValueError):
                     s.search(start, target, 'upgrade')
-
-    def test_issues_are_opt_in_and_unreviewed(self):
-        plain = s.search('6.6.10.0', '6.7.0.0', 'upgrade', 10)
-        self.assertNotIn('issue_candidates', plain)
-        with_issues = s.search('6.6.10.0', '6.7.0.0', 'upgrade', 10, True)
-        self.assertTrue(with_issues['issue_candidates'])
-        self.assertIn('not confirmed', with_issues['issue_notice'])
-        self.assertEqual(len(with_issues['issue_candidates']), 5)
 
     def test_query_and_absolute_local_paths_are_not_echoed(self):
         result = s.search('6.6.10.0', '6.7.0.0', 'payment handler', 10)
@@ -62,13 +54,8 @@ class SearchTests(unittest.TestCase):
 
     def test_search_does_not_open_network_connections(self):
         with patch('socket.socket', side_effect=AssertionError('unexpected network access')):
-            result = s.search('6.6.10.0', '6.7.0.0', 'payment', 5, True)
+            result = s.search('6.6.10.0', '6.7.0.0', 'payment', 5)
         self.assertTrue(result['matches'])
-
-    def test_issue_index_contains_only_curated_minimal_fields(self):
-        index = json.loads((s.ROOT / 'github-issue-index.json').read_text(encoding='utf-8'))
-        self.assertEqual(len(index['issues']), 5)
-        self.assertTrue(all(set(x) == {'title', 'url'} for x in index['issues']))
 
     def test_headings_inside_code_fences_do_not_change_release(self):
         with tempfile.TemporaryDirectory() as tmp:

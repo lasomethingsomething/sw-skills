@@ -13,7 +13,7 @@ Use synthetic project information. Do not include personal data, credentials, pr
 
 ## Review checklist
 
-- [ ] The planner's version reflects the change and deterministic checks passed.
+- [ ] The planner's version and CHANGELOG reflect the change and deterministic checks passed.
 - [ ] Evaluation criteria each assess one outcome; duplicated or conflicting expectations are resolved.
 - [ ] The evaluation covers the current skill changes and compares a baseline; unrun checks are marked not run.
 - [ ] Source claims, affected versions, links and any later corrections are checked.

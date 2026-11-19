@@ -1,6 +1,8 @@
 name: Upgrade planner external links
 
 on:
+  schedule:
+    - cron: '0 6 * * 1'
   workflow_dispatch:
 
 permissions:
@@ -16,3 +18,25 @@ jobs:
         with:
           args: --verbose --no-progress --exclude-mail 'shopware-upgrade-planner/SKILL.md' 'shopware-upgrade-planner/references/*.md' 'shopware-upgrade-planner/assets/*.md'
           fail: true
+
+  freshness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fail when Shopware tagged a release newer than the bundled snapshots
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api repos/shopware/shopware/tags --paginate --jq '.[].name' > tags.txt
+          python3 - <<'PY'
+          import re, sys
+          sys.path.insert(0, 'shopware-upgrade-planner/scripts')
+          from search_sources import SOURCE_RANGE, TARGET_RANGE
+          tags = [tuple(map(int, m.groups())) for m in
+                  (re.fullmatch(r'v(\d+)\.(\d+)\.(\d+)\.(\d+)', t.strip()) for t in open('tags.txt')) if m]
+          newer = [t for t in tags if (t[:3] == SOURCE_RANGE[1][:3] and t > SOURCE_RANGE[1])
+                   or (t[:2] == TARGET_RANGE[1][:2] and t > TARGET_RANGE[1])]
+          for t in sorted(newer):
+              print('Newer than bundled snapshots: v' + '.'.join(map(str, t)))
+          sys.exit(1 if newer else 0)
+          PY
