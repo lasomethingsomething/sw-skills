@@ -1,6 +1,6 @@
 # sw-skills
 
-Agent skills for Shopware: `shopware-upgrade-planner`, `shopware-magento-migration`.
+Agent skills for Shopware: `shopware-upgrade-planner`, `shopware-upgrade-planner-deluxe` (the planner plus a real-migration field report), `shopware-magento-migration`.
 
 ## Review every skill change against these sources
 

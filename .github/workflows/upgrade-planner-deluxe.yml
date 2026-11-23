@@ -1,0 +1,45 @@
+name: Upgrade planner deluxe checks
+
+on:
+  push:
+    paths:
+      - 'shopware-upgrade-planner-deluxe/**'
+      - '.github/workflows/upgrade-planner-deluxe.yml'
+  pull_request:
+    paths:
+      - 'shopware-upgrade-planner-deluxe/**'
+      - '.github/workflows/upgrade-planner-deluxe.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install PyYAML==6.0.2
+      - name: Validate skill and evaluation suite
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          EVENT_NAME: ${{ github.event_name }}
+        run: |
+          if [ "$EVENT_NAME" = "pull_request" ]; then
+            python shopware-upgrade-planner-deluxe/scripts/check_skill.py --base-ref "$BASE_SHA"
+          else
+            python shopware-upgrade-planner-deluxe/scripts/check_skill.py
+          fi
+      - name: Run deterministic tests
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s shopware-upgrade-planner-deluxe/scripts -p 'test_*.py' -v
+      - name: Test paired evaluation helper
+        env:
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: python -m unittest discover -s shopware-upgrade-planner-deluxe/evals/paired -p 'test_*.py' -v

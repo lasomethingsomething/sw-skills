@@ -16,7 +16,7 @@ jobs:
       - name: Check curated guidance links
         uses: lycheeverse/lychee-action@8646ba30535128ac92d33dfc9133794bfdd9b411 # v2.8.0
         with:
-          args: --verbose --no-progress --exclude-mail 'shopware-upgrade-planner/SKILL.md' 'shopware-upgrade-planner/references/*.md' 'shopware-upgrade-planner/assets/*.md'
+          args: --verbose --no-progress --exclude-mail 'shopware-upgrade-planner/SKILL.md' 'shopware-upgrade-planner/references/*.md' 'shopware-upgrade-planner/assets/*.md' 'shopware-upgrade-planner-deluxe/SKILL.md' 'shopware-upgrade-planner-deluxe/references/*.md'
           fail: true
 
   freshness:
